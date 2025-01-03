@@ -1,0 +1,157 @@
+:root {
+    --primary: #0078D4;
+    --accent: #00D4A8;
+}
+
+body {
+    margin: 0;
+    padding-left: 40px;
+    padding-right: 40px;
+    font-family: 'Rubik', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 40px;
+    font-size: 3em;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 2px;
+}
+
+.card {
+    background: rgba(30, 32, 40, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 24px;
+    margin-bottom: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+    );
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+h2 {
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.7;
+    margin: 0;
+    font-size: 15px;
+}
+
+
+
+
+/* Base styles for buttons */
+.execute,
+.clear,
+.iy {
+    position: fixed;
+    bottom: 30px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Specific positioning for each button */
+.execute {
+    right: 30px;
+    width: 115px;
+    height: 50px;
+}
+
+.clear {
+    right: 155px;
+}
+
+.iy {
+    right: 215px;
+}
+
+/* Paragraph inside .execute */
+.execute p {
+    margin-left: 6px;
+}
+
+/* Hover styles for buttons */
+.execute:hover,
+.clear:hover,
+.iy:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Icon styles */
+.material-icons-round {
+    font-size: 24px;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+/* Hover effects for icons */
+.execute:hover .material-icons-round,
+.clear:hover .material-icons-round,
+.iy:hover .material-icons-round {
+    transform: scale(1.1);
+}

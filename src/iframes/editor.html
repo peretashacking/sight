@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="/scrollbar.css" rel="stylesheet">
+    <style>
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0); /* Transparent background */
+            font-size: 14px;
+            overflow: hidden; /* Prevent the editor from affecting layout */
+        }
+        #editor .ace_gutter {
+            background-color: rgba(0, 0, 0, 0);
+            color: #8F908A;
+            border-right: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+<div id="editor">-- Welcome to Sight</div>
+
+
+<button class="iy" id="iy">
+    <span class="material-icons-round">all_inclusive</span>
+</button>
+
+<button class="clear" id="clear">
+    <span class="material-icons-round">delete</span>
+</button>
+
+<button class="execute" id="execute">
+    <span class="material-icons-round">play_circle</span> <p> Execute</p>
+</button>
+
+<script src="/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/one_dark");
+    editor.session.setMode("ace/mode/lua");
+    editor.setShowPrintMargin(false);
+
+    document.getElementById("execute").addEventListener("click", function() {
+        const editorValue = editor.getValue();
+        console.log(editorValue);
+        parent.execute(editorValue);
+    });
+
+    document.getElementById("clear").addEventListener("click", function() {
+        editor.setValue("");
+    });
+
+    document.getElementById("iy").addEventListener("click", function() {
+        parent.execute("loadstring(game:HttpGet('https://lua.peretas.tech/iballexus/infiniteyield.lua'))()");
+    });
+
+
+</script>
+</body>
+</html>

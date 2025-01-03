@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ScriptBlox Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0078D4;
+            --primary-dark: #005fb8;
+            --accent: #00D4A8;
+            --background: #13151a00;
+            --surface: #1e2028;
+            --titlebar: #2a2d30;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: radial-gradient(circle at top right, var(--surface), var(--background));
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background: rgba(28, 43, 44, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Rubik', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 212, 168, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 40px;
+        }
+
+        .script-card {
+            background: rgba(30, 32, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .script-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .script-content {
+            padding: 20px;
+        }
+
+        .script-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .game-name {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .script-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .script-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: auto;
+        }
+
+        .script-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .execute-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .execute-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 120, 212, 0.3);
+        }
+
+        .execute-btn:active {
+            transform: translateY(0);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            text-align: center;
+            color: #ff5f57;
+            padding: 20px;
+            display: none;
+        }
+
+        .verification-badge {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <span class="material-icons-round">code</span>
+            ScriptBlox
+        </div>
+        <div class="search-container">
+            <span class="material-icons-round search-icon">search</span>
+            <input type="text" class="search-input" placeholder="Search scripts...">
+        </div>
+    </div>
+
+    <div class="loading-spinner"></div>
+    <div class="error-message"></div>
+    <div class="scripts-grid"></div>
+
+    <script>
+        const searchInput = document.querySelector('.search-input');
+        const scriptsGrid = document.querySelector('.scripts-grid');
+        const loadingSpinner = document.querySelector('.loading-spinner');
+        const errorMessage = document.querySelector('.error-message');
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function executeScript(script) {
+            parent.execute(script);
+        }
+
+        async function fetchScripts(query = '') {
+            try {
+                loadingSpinner.style.display = 'block';
+                scriptsGrid.style.display = 'none';
+                errorMessage.style.display = 'none';
+
+                const baseUrl = 'https://scriptblox-api-proxy.vercel.app/api/search';
+                const params = new URLSearchParams({
+                    q: query,
+                    page: 1,
+                    limit: 20
+                });
+
+                const response = await fetch(`${baseUrl}?${params}`);
+                const data = await response.json();
+
+
+                if (data.error) {
+                    errorMessage.textContent = 'Failed, or you haven\'t searched for anything. Try searching for something. Error: ' + data.error;
+                    errorMessage.style.display = 'block';
+                } else {
+                    displayScripts(data.result?.scripts || []);
+                }
+
+                displayScripts(data.result?.scripts || []);
+            } catch (error) {
+                console.error('Error fetching scripts:', error);
+                errorMessage.textContent = 'Error loading scripts. Please try again later.';
+                errorMessage.style.display = 'block';
+            } finally {
+                loadingSpinner.style.display = 'none';
+                scriptsGrid.style.display = 'grid';
+            }
+        }
+
+        function displayScripts(scripts) {
+            scriptsGrid.innerHTML = scripts.map(script => `
+            <div class="script-card">
+                <img class="game-image" src="${script.game.imageUrl}" alt="${script.game.name}" onerror="this.src='https://tr.rbxcdn.com/placeholder/150/150/Image/Png'">
+                    <div class="script-content">
+                        <div class="script-title">
+                            ${script.title}
+                            ${script.verified ? `<span class="verification-badge">
+                                <span class="material-icons-round" style="font-size: 14px;">verified</span>
+                                Verified
+                            </span>` : ''}
+                        </div>
+                        <div class="game-name">${script.game.name}</div>
+                        <div class="script-meta">
+                            <div class="script-stats">
+                                <div class="stat">
+                                    <span class="material-icons-round">thumb_up</span>
+                                    ${script.views || 0}
+                                </div>
+                                <div class="stat">
+                                    <span class="material-icons-round">payments</span>
+                                    ${script.scriptType}
+                                </div>
+                            </div>
+                            <div class="script-date">
+                                ${new Date(script.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <button class="execute-btn" onclick="executeScript('${script.script.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                            <span class="material-icons-round">play_arrow</span>
+                            Execute Script
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const handleSearch = debounce((event) => {
+            fetchScripts(event.target.value);
+        }, 500);
+
+        searchInput.addEventListener('input', handleSearch);
+        fetchScripts();
+    </script>
+</body>
+</html>

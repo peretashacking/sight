@@ -9,6 +9,8 @@ mod commands;
 use std::sync::Mutex;
 use commands::macsploit;
 use commands::settings;
+use commands::robloxcontrol;
+use commands::openfs;
 
 pub struct AppState {
     pub api: std::sync::Mutex<Option<msapi::MsApi>>
@@ -24,7 +26,12 @@ fn main() {
             macsploit::attach,
             macsploit::update_setting,
             settings::read_setting,
-            settings::write_setting
+            settings::write_setting,
+            robloxcontrol::start_roblox,
+            robloxcontrol::kill_roblox,
+            robloxcontrol::watch_logs,
+            openfs::msworkspace,
+            openfs::msautoexecute
         ])
         .build(tauri::generate_context!())
         .expect("error while running tauri application")

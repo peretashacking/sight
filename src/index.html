@@ -13,15 +13,15 @@
 <div class="decoration decoration-2"></div>
 
 <div data-tauri-drag-region class="titlebar">
-  <div class="traffic-lights">
+  <div class="traffic-lights" data-tauri-drag-region>
     <div class="light red" id="titlebar-close" data-symbol="X"></div>
     <div class="light yellow" id="titlebar-minimize" data-symbol="-"></div>
     <div class="light green" id="titlebar-maximize" data-symbol="+"></div>
   </div>
-  <div class="sightText">
+  <div class="sightText" data-tauri-drag-region>
     <p>Sight for MacSploit</p>
   </div>
-  <div class="injectStatus">
+  <div class="injectStatus" data-tauri-drag-region>
     <p id="statusText">Waiting for AutoInject...</p>
   </div>
 </div>
@@ -34,25 +34,29 @@
 
 <div class="sidebar">
   <div class="menu-items">
-    <div class="menu-item home active" id="homeButton">
-      <span class="material-icons-round">home</span>
-      <span>Home</span>
-    </div>
     <div class="menu-item editor" id="editorButton">
       <span class="material-icons-round">code</span>
       <span>Script Editor</span>
     </div>
-    <div class="menu-item editor" id="settingsButton">
-      <span class="material-icons-round">settings</span>
-      <span>MacSploit Settings</span>
+    <!--<div class="menu-item editor" id="consoleButton">
+      <span class="material-icons-round">terminal</span>
+      <span>Console</span>
+    </div>-->
+    <div class="menu-item editor" id="bypassButton">
+      <span class="material-icons-round">share</span>
+      <span>Bypass Hub</span>
+    </div>
+    <div class="menu-item editor" id="scriptbloxButton">
+      <span class="material-icons-round">book</span>
+      <span>Script Library</span>
     </div>
     <div class="menu-item editor" id="infoButton">
       <span class="material-icons-round">info</span>
       <span>About Sight</span>
     </div>
-    <div class="menu-item editor" id="scriptbloxButton">
-      <span class="material-icons-round">book</span>
-      <span>ScriptBlox Library</span>
+    <div class="menu-item editor" id="settingsButton">
+      <span class="material-icons-round">settings</span>
+      <span>MacSploit Settings</span>
     </div>
     <div class="menu-item editor" id="injectButton">
       <span class="material-icons-round">link</span>
@@ -63,11 +67,12 @@
 
 <div class="content">
   <!-- Preload all iframes -->
-  <iframe id="homeIframe" src="iframes/home.html" class="iframe hidden"></iframe>
   <iframe id="editorIframe" src="iframes/editor.html" class="iframe"></iframe>
   <iframe id="settingsIframe" src="iframes/settings.html" class="iframe hidden"></iframe>
   <iframe id="infoIframe" src="iframes/about.html" class="iframe hidden"></iframe>
   <iframe id="scriptbloxIframe" src="iframes/scriptblox.html" class="iframe hidden"></iframe>
+  <iframe id="bypassIframe" src="iframes/bypass.html" class="iframe hidden"></iframe>
+  <!--<iframe id="consoleIframe" src="iframes/console.html" class="iframe hidden"></iframe>-->
 </div>
 
 <script>
@@ -94,10 +99,7 @@
     document.getElementById(activeIframeId).classList.remove('hidden');
   }
 
-  function loadHomePage() {
-    setActiveMenuItem('homeButton');
-    toggleIframe('homeIframe');
-  }
+
 
   function loadEditorPage() {
     setActiveMenuItem('editorButton');
@@ -117,10 +119,14 @@
     setActiveMenuItem('scriptbloxButton');
     toggleIframe('scriptbloxIframe');
   }
+  function loadBypassPage() {
+    setActiveMenuItem('bypassButton');
+    toggleIframe('bypassIframe');
+  }
+  //function loadConsolePage() { setActiveMenuItem('consoleButton'); toggleIframe('consoleIframe'); }
 
   // Add event listeners for the sidebar toggle and menu items
   sidebarToggle.addEventListener('click', toggleSidebar);
-  document.getElementById('homeButton').addEventListener('click', loadHomePage);
   document.getElementById('editorButton').addEventListener('click', loadEditorPage);
   document.getElementById('settingsButton').addEventListener('click', loadSettingsPage);
   document.getElementById('infoButton').addEventListener('click', loadInfoPage);
@@ -128,6 +134,8 @@
   document.getElementById('injectButton').addEventListener('click', function() {
     attach();
   });
+  document.getElementById('bypassButton').addEventListener('click', loadBypassPage);
+  // document.getElementById('consoleButton').addEventListener('click', loadConsolePage);
 
   // Load the code editor page by default
   //loadSettingsPage();
@@ -140,6 +148,7 @@
       statusText.style.backgroundColor = color;
     }
   }
+
 </script>
 
 <script src="brick.js"></script>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0078D4;
+      --primary-dark: #005fb8;
+      --accent: #00D4A8;
+      --background: #13151a;
+      --surface: #1e2028;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background: rgba(30, 32, 40, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #fff, #a0a0a0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .search-container {
+      display: flex;
+      gap: 16px;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .search-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .bypass-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .bypass-card {
+      background: rgba(30, 32, 40, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .bypass-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .bypass-title {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: white;
+    }
+
+    .bypass-description {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .bypass-date {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .main-content {
+      display: block;
+      transition: all 0.3s ease;
+    }
+
+    .main-content.hidden {
+      display: none;
+    }
+
+    .frame-view {
+      display: none;
+      height: calc(100vh - 60px);
+      margin-top: 60px;
+    }
+
+    .frame-view.visible {
+      display: block;
+    }
+
+    .frame-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(30, 32, 40, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 1000;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .current-url {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 60%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 class="title">Bypass Scripts with Script Bypasses</h1>
+      <div class="search-container">
+        <input type="text" class="search-box" placeholder="Search bypasses...">
+      </div>
+    </div>
+
+    <div class="bypass-list" id="bypassList">
+      <!-- Cards will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <div class="frame-view">
+    <div class="frame-header">
+      <div class="back-button">
+        <span class="material-icons-round">arrow_back</span>
+        Back to Home
+      </div>
+      <div class="current-url"></div>
+    </div>
+    <iframe></iframe>
+  </div>
+
+  <script>
+    // Bypass data in JSON format
+    const bypasses = [
+      {
+        title: "rip.linkvertise.lol",
+        link: "https://rip.linkvertise.lol/",
+        dateAdded: "2025-01-03"
+      },
+      {
+        title: "bypass.link",
+        link: "https://bypass.link/",
+        dateAdded: "2025-01-03"
+      },
+      {
+        title: "bypass.city",
+        link: "https://bypass.city",
+        dateAdded: "2025-01-03"
+      },
+      {
+        title: "bypassunlock.com",
+        link: "https://bypassunlock.com/",
+        dateAdded: "2025-01-03"
+      },
+      {
+        title: "unshorten.it",
+        link: "https://unshorten.it/",
+        dateAdded: "2025-01-03"
+      },
+      {
+        title: "chat.deepseek.com",
+        link: "https://chat.deepseek.com/",
+        dateAdded: "2025-02-02"
+      }
+    ];
+
+    function createBypassCard(bypass) {
+      return `
+        <div class="bypass-card" data-url="${bypass.link}">
+          <div class="bypass-title">${bypass.title}</div>
+          <div class="bypass-date">
+            <span class="material-icons-round">calendar_today</span>
+            Added: ${new Date(bypass.dateAdded).toLocaleDateString()}
+          </div>
+        </div>
+      `;
+    }
+
+    // Populate bypass list
+    const bypassList = document.getElementById('bypassList');
+    bypassList.innerHTML = bypasses.map(createBypassCard).join('');
+
+    // Setup event listeners
+    const searchBox = document.querySelector('.search-box');
+    const bypassCards = document.querySelectorAll('.bypass-card');
+    const mainContent = document.querySelector('.main-content');
+    const frameView = document.querySelector('.frame-view');
+    const backButton = document.querySelector('.back-button');
+    const currentUrl = document.querySelector('.current-url');
+    const iframe = document.querySelector('iframe');
+
+    // Search functionality
+    searchBox.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      bypassCards.forEach(card => {
+        const title = card.querySelector('.bypass-title').textContent.toLowerCase();
+        const shouldShow = title.includes(searchTerm);
+        card.style.display = shouldShow ? 'block' : 'none';
+      });
+    });
+
+    // Card click handling
+    bypassCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const title = card.querySelector('.bypass-title').textContent;
+        const url = card.dataset.url;
+        mainContent.classList.add('hidden');
+        frameView.classList.add('visible');
+        currentUrl.textContent = `Running: ${title}`;
+        iframe.src = url;
+      });
+    });
+
+    // Back button handling
+    backButton.addEventListener('click', () => {
+      mainContent.classList.remove('hidden');
+      frameView.classList.remove('visible');
+      iframe.src = 'about:blank';
+    });
+  </script>
+</body>
+</html>

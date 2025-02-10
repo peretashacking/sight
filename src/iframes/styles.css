@@ -10,6 +10,10 @@ body {
     font-family: 'Rubik', sans-serif;
     color: #fff;
     min-height: 100vh;
+    user-select: none;
+    -webkit-user-select: none; /* For Safari */
+    -moz-user-select: none; /* For Firefox */
+    -ms-user-select: none; /* For Internet Explorer/Edge */
 }
 
 h1 {
@@ -19,6 +23,7 @@ h1 {
     font-size: 3em;
     background: linear-gradient(135deg, #fff, var(--primary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     position: relative;
     display: inline-block;
@@ -92,7 +97,10 @@ p {
 /* Base styles for buttons */
 .execute,
 .clear,
-.iy {
+.iy,
+.roblox,
+.save,
+.open {
     position: fixed;
     bottom: 30px;
     z-index: 100;
@@ -112,30 +120,21 @@ p {
     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-/* Specific positioning for each button */
-.execute {
-    right: 30px;
-    width: 115px;
-    height: 50px;
-}
-
-.clear {
-    right: 155px;
-}
-
-.iy {
-    right: 215px;
-}
-
-/* Paragraph inside .execute */
-.execute p {
-    margin-left: 6px;
-}
+/* Update specific positioning */
+.execute { right: 30px; width: 115px; }
+.clear { right: 155px; }
+.save { right: 215px; }
+.open { right: 275px; }
+.iy { right: 335px; }
+.roblox { right: 395px; }
 
 /* Hover styles for buttons */
 .execute:hover,
 .clear:hover,
-.iy:hover {
+.save:hover,
+.open:hover,
+.iy:hover,
+.roblox:hover {
     background: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
@@ -152,6 +151,155 @@ p {
 /* Hover effects for icons */
 .execute:hover .material-icons-round,
 .clear:hover .material-icons-round,
-.iy:hover .material-icons-round {
+.iy:hover .material-icons-round,
+.roblox:hover .material-icons-round {
     transform: scale(1.1);
+}
+
+/* Tooltip styles */
+button[title] {
+    position: fixed;
+}
+
+button[title]::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    margin-bottom: 5px;
+}
+
+button[title]:hover::before {
+    opacity: 1;
+}
+
+.roblox img {
+    width: 24px;
+    height: 24px;
+}
+/* Add these styles to your existing CSS file */
+
+.tab-container {
+    display: flex;
+    align-items: center;
+    background: rgba(30, 32, 40, 0.2);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px;
+    height: 40px;
+    box-sizing: border-box;
+    width: calc(100% + 80px); /* Adjust width to stretch across the entire top */
+    margin-left: -40px; /* Adjust margin to align with the body padding */
+}
+
+.tabs {
+    display: flex;
+    flex: 1;
+    overflow-x: auto;
+    gap: 4px;
+    padding-right: 4px;
+}
+
+.tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    min-width: 120px;
+    max-width: 200px;
+    height: 32px;
+    padding: 0 12px;
+    background: transparent;
+    border-radius: 8px;
+    cursor: default;
+    user-select: none;
+    transition: all 0.2s ease;
+    position: relative;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.tab-title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.tab-title.editing {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 100%;
+    font-family: 'Rubik', sans-serif;
+    font-size: 14px;
+}
+
+.tab-close {
+    opacity: 0;
+    margin-left: 8px;
+    font-size: 18px !important;
+    padding: 2px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.tab:hover .tab-close {
+    opacity: 1;
+}
+
+.tab-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.new-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.new-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.new-tab .material-icons-round {
+    font-size: 20px;
+}
+
+.lualogo {
+    height: 18px;
+    margin-right: 6px;
+    filter: invert(1);
+    display: block;
+    margin-left: auto;
 }

@@ -261,8 +261,10 @@ iframe {
 
 .titlebar {
   height: 35px;
-
   user-select: none;
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none; /* For Firefox */
+  -ms-user-select: none; /* For Internet Explorer/Edge */
   display: flex;
   justify-content: flex-start;
   position: fixed;
@@ -271,6 +273,7 @@ iframe {
   right: 0;
   z-index: 100;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+  cursor: default;
 }
 
 .titlebar-button {

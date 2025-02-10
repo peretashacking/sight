@@ -19,6 +19,10 @@
             font-family: 'Rubik', sans-serif;
             color: #fff;
             min-height: 100vh;
+            user-select: none;
+            -webkit-user-select: none; /* For Safari */
+            -moz-user-select: none; /* For Firefox */
+            -ms-user-select: none; /* For Internet Explorer/Edge */
         }
 
         h1 {
@@ -213,10 +217,63 @@
         .warning {
             color: yellow;
         }
+
+        .button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .button .material-icons-round {
+            font-size: 24px;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .button p {
+            margin-left: 8px;
+        }
+
+        .button:hover .material-icons-round {
+            transform: scale(1.1);
+        }
+
+        .mr-5 {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
 <h1>MacSploit Settings</h1>
+
+<div class="section-header">Open MacSploit Folders</div>
+<div class="card">
+    <div class="button mr-5" id="openMsws">
+        <span class="material-icons-round">folder</span>
+        <p>Open MacSploit Workspace</p>
+    </div>
+    <div class="button" id="openMsae">
+        <span class="material-icons-round">folder</span>
+        <p>Open MacSploit Auto Execution</p>
+    </div>
+</div>
 
 <div class="section-header">Main Settings</div>
 <div class="card">
@@ -459,7 +516,7 @@
                 <span class="material-icons-round">report</span>
                 Decreased Sandbox
             </h2>
-            <p>Decreases Sandbox protections. <span class="warning">Do not disable this if you do not know what you are doing. This can open you up to getting hacked via malicious scripts.</span></p>
+            <p><span class="warning">Do not enable this if you do not know what you are doing. This can open you up to getting hacked via malicious scripts.</span> Decreases Sandbox protections.</p>
         </div>
         <div class="checkbox-wrapper">
             <input type="checkbox" id="decreasedSandbox">
@@ -589,6 +646,13 @@
         console.error("Failed to read settings after maximum retries");
     }
 })();
+
+document.getElementById('openMsws').addEventListener('click', () => {
+    parent.openMsFolder('msworkspace');
+});
+document.getElementById('openMsae').addEventListener('click', () => {
+    parent.openMsFolder('msautoexecution');
+});
 
     
 </script>

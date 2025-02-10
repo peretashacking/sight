@@ -10,13 +10,12 @@
     <style>
         #editor {
             position: absolute;
-            top: 0;
+            top: 40px; /* Height of tab bar */
             right: 0;
             bottom: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0); /* Transparent background */
+            background-color: rgba(0, 0, 0, 0);
             font-size: 14px;
-            overflow: hidden; /* Prevent the editor from affecting layout */
         }
         #editor .ace_gutter {
             background-color: rgba(0, 0, 0, 0);
@@ -26,43 +25,46 @@
     </style>
 </head>
 <body>
+<div class="tab-container">
+    <div class="tabs" id="tabs">
+        <div class="tab active" data-tab-id="1">
+            <img src="lualogob.webp" alt="Lua Logo" class="lualogo">
+            <span class="tab-title">Sight 1</span>
+            <span class="tab-close material-icons-round">close</span>
+        </div>
+    </div>
+    <button class="new-tab">
+        <span class="material-icons-round">add</span>
+    </button>
+</div>
+
 <div id="editor">-- Welcome to Sight</div>
 
+<button class="roblox" id="killRoblox" title="Kill/Start Roblox">
+    <img src="RobloxLogo.webp">
+</button>
 
-<button class="iy" id="iy">
+<button class="iy" id="iy" title="Execute Infinite Yield">
     <span class="material-icons-round">all_inclusive</span>
 </button>
 
-<button class="clear" id="clear">
+<button class="save" id="save" title="Save File">
+    <span class="material-icons-round">save</span>
+</button>
+
+<button class="open" id="open" title="Open File">
+    <span class="material-icons-round">folder_open</span>
+</button>
+
+<button class="clear" id="clear" title="Clear Editor">
     <span class="material-icons-round">delete</span>
 </button>
 
-<button class="execute" id="execute">
+<button class="execute" id="execute" title="Execute Script">
     <span class="material-icons-round">play_circle</span> <p> Execute</p>
 </button>
 
 <script src="/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-    const editor = ace.edit("editor");
-    editor.setTheme("ace/theme/one_dark");
-    editor.session.setMode("ace/mode/lua");
-    editor.setShowPrintMargin(false);
-
-    document.getElementById("execute").addEventListener("click", function() {
-        const editorValue = editor.getValue();
-        console.log(editorValue);
-        parent.execute(editorValue);
-    });
-
-    document.getElementById("clear").addEventListener("click", function() {
-        editor.setValue("");
-    });
-
-    document.getElementById("iy").addEventListener("click", function() {
-        parent.execute("loadstring(game:HttpGet('https://lua.peretas.tech/iballexus/infiniteyield.lua'))()");
-    });
-
-
-</script>
+<script src="editor.js"></script>
 </body>
 </html>

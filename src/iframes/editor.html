@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="/scrollbar.css" rel="stylesheet">
+    <style>
+        #editor {
+            position: absolute;
+            top: 40px; /* Height of tab bar */
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0);
+            font-size: 14px;
+        }
+        #editor .ace_gutter {
+            background-color: rgba(0, 0, 0, 0);
+            color: #8F908A;
+            border-right: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+<div class="tab-container">
+    <div class="tabs" id="tabs">
+        <div class="tab active" data-tab-id="1">
+            <img src="lualogob.webp" alt="Lua Logo" class="lualogo">
+            <span class="tab-title">Sight 1</span>
+            <span class="tab-close material-icons-round">close</span>
+        </div>
+    </div>
+    <button class="new-tab">
+        <span class="material-icons-round">add</span>
+    </button>
+</div>
+
+<div id="editor">-- Welcome to Sight</div>
+
+<button class="roblox" id="killRoblox" title="Kill/Start Roblox">
+    <img src="RobloxLogo.webp">
+</button>
+
+<button class="iy" id="iy" title="Execute Infinite Yield">
+    <span class="material-icons-round">all_inclusive</span>
+</button>
+
+<button class="save" id="save" title="Save File">
+    <span class="material-icons-round">save</span>
+</button>
+
+<button class="open" id="open" title="Open File">
+    <span class="material-icons-round">folder_open</span>
+</button>
+
+<button class="clear" id="clear" title="Clear Editor">
+    <span class="material-icons-round">delete</span>
+</button>
+
+<button class="execute" id="execute" title="Execute Script">
+    <span class="material-icons-round">play_circle</span> <p> Execute</p>
+</button>
+
+<script src="/ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="editor.js"></script>
+</body>
+</html>

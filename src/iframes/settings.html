@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacSploit Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="/scrollbar.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0078D4;
+            --accent: #00D4A8;
+            --background: #13151a;
+            --surface: #1e2028;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+        }
+
+        [data-theme="light"] {
+            --background: #ffffff;
+            --surface: #f5f5f5;
+            --text: #000000;
+            --text-secondary: rgba(0, 0, 0, 0.8);
+        }
+        
+        [data-theme="blue"] {
+            --primary: #3b82f6;
+            --accent: #60a5fa;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+        }
+        
+        [data-theme="purple"] {
+            --primary: #8b5cf6;
+            --accent: #a78bfa;
+            --background: #1e1b4b;
+            --surface: #312e81;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+        }
+        
+        [data-theme="green"] {
+            --primary: #10b981;
+            --accent: #34d399;
+            --background: #064e3b;
+            --surface: #065f46;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+        }
+        
+        [data-theme="amber"] {
+            --primary: #f59e0b;
+            --accent: #fbbf24;
+            --background: #78350f;
+            --surface: #92400e;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            margin: 0;
+            padding: 12px 40px; /* Added top padding */
+            font-family: 'Rubik', sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            user-select: none;
+            -webkit-user-select: none; /* For Safari */
+            -moz-user-select: none; /* For Firefox */
+            -ms-user-select: none; /* For Internet Explorer/Edge */
+        }
+
+        h1 {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 24px; /* Reduced from 40px */
+            font-size: 3em;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .card {
+            background: rgba(30, 32, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+            );
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        h2 {
+            font-weight: 500;
+            margin-top: 16px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: flex-start; /* Changed from center to flex-start */
+            justify-content: space-between;
+            padding: 16px 0; /* Added padding instead of margin */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Added separator */
+        }
+
+        .setting-row:last-child {
+            padding-bottom: 0; /* Remove padding for last item */
+            border-bottom: none; /* Remove border for last item */
+        }
+
+        .setting-row:first-child {
+            padding-top: 0; /* Remove padding for first item */
+        }
+
+        .checkbox-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-top: 4px; /* Added to align with title */
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            visibility: hidden;
+            width: 0;
+            height: 0;
+        }
+
+        .checkbox-wrapper label {
+            cursor: pointer;
+            display: block;
+            width: 50px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 13px;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .checkbox-wrapper label::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s ease;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked + label {
+            background: var(--primary);
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked + label::after {
+            transform: translateX(24px);
+        }
+
+        .execute {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            width: 250px;
+            height: 50px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .execute p {
+            margin-left: 5px;
+        }
+
+        .execute:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .execute .material-icons-round {
+            font-size: 24px;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .execute:hover .material-icons-round {
+            transform: scale(1.1);
+        }
+
+        .section-header {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 32px 0 16px; /* Adjusted margins */
+        }
+
+        .section-header:first-of-type {
+            margin-top: 24px; /* Reduced space after title */
+        }
+
+        .warning {
+            color: yellow;
+        }
+
+        .button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .button .material-icons-round {
+            font-size: 24px;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .button p {
+            margin-left: 8px;
+        }
+
+        .button:hover .material-icons-round {
+            transform: scale(1.1);
+        }
+
+        .mr-5 {
+            margin-right: 5px;
+        }
+
+        /* Theme Dropdown Styles */
+        .theme-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .theme-dropdown {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 16px;
+            color: var(--text);
+            background: rgba(30, 32, 40, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            appearance: none;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .theme-dropdown:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-dropdown:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
+        }
+
+        .dropdown-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-secondary);
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 100px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, var(--background), var(--surface));
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .theme-preview::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60%;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .theme-preview::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            width: 40%;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<h1>Settings</h1>
+
+<h2>Sight Settings</h2>
+<div class="section-header">Theme</div>
+<div class="card">
+    <div class="theme-selector">
+        <div class="dropdown-container">
+            <select id="theme-dropdown" class="theme-dropdown">
+                <option value="dark">Default Theme</option>
+                <option value="blue">Blue Theme</option>
+                <option value="purple">Purple Theme</option>
+                <option value="green">Green Theme</option>
+                <option value="amber">Orange Theme</option>
+                <option value="light">Light Theme (really fucking trash)</option>
+            </select>
+            <div class="dropdown-arrow">
+                <span class="material-icons-round">arrow_drop_down</span>
+            </div>
+        </div>
+        <div id="theme-preview" class="theme-preview dark-theme"></div>
+    </div>
+</div>
+
+<h2>MacSploit Settings</h2>
+<div class="section-header">Open MacSploit Folders</div>
+<div class="card">
+    <div class="button mr-5" id="openMsws">
+        <span class="material-icons-round">folder</span>
+        <p>Open MacSploit Workspace</p>
+    </div>
+    <div class="button" id="openMsae">
+        <span class="material-icons-round">folder</span>
+        <p>Open MacSploit Auto Execution</p>
+    </div>
+</div>
+
+<div class="section-header">Main Settings</div>
+<div class="card">
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">autorenew</span>
+                Auto Execute
+            </h2>
+            <p>[Does not work with Sight] Automatically execute scripts (Must be configured with MacSploit)</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="autoExecute">
+            <label for="autoExecute"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">add_circle</span>
+                Uncap FPS
+            </h2>
+            <p>Remove the Roblox frame rate limit.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="uncapFPS">
+            <label for="uncapFPS"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">warning</span>
+                Protect Errors
+            </h2>
+            <p>Protects errors.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="protectErrors">
+            <label for="protectErrors"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">devices</span>
+                HWID Spoofer
+            </h2>
+            <p>Spoofs your hardware ID to prevent the Roblox Ban API and to prevent possible HWID account bans if implemented in the future.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="hwidSpoofer">
+            <label for="hwidSpoofer"></label>
+        </div>
+    </div>
+</div>
+
+<div class="section-header">Sandbox Settings</div>
+<div class="card">
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">folder</span>
+                Allow File System
+            </h2>
+            <p>Allows scripts to access the local file system on your computer.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="allowFS">
+            <label for="allowFS"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">lan</span>
+                Allow WebSocket Library
+            </h2>
+            <p>Allows WebSocket Library.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="allowWebsocketLibrary">
+            <label for="allowWebsocketLibrary"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">http</span>
+                Allow HTTP Traffic
+            </h2>
+            <p>Allows network requests to be made over the HTTP protocol.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="allowHttpTraffic">
+            <label for="allowHttpTraffic"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">compare_arrows</span>
+                Allow Queue on Teleport
+            </h2>
+            <p>Allows queue on teleport.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="allowQueueOnTeleport">
+            <label for="allowQueueOnTeleport"></label>
+        </div>
+    </div>
+</div>
+
+<div class="section-header">Environment Settings</div>
+<div class="card">
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">dns</span>
+                Allow Server Teleports
+            </h2>
+            <p>Allows the game you are playing to teleport you to another server. When unchecked, you will not be teleported in-game.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="allowServerTeleports">
+            <label for="allowServerTeleports"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">skip_next</span>
+                Bypass Place Restrictions
+            </h2>
+            <p>Bypasses place restrictions.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="bypassPlaceRestrictions">
+            <label for="bypassPlaceRestrictions"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">cloud_download</span>
+               Dump All Scripts on Join
+            </h2>
+            <p>Dumps all scripts in game upon joining a server.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="dumpAllScriptsOnJoin">
+            <label for="dumpAllScriptsOnJoin"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round warning">vaccines</span>
+                <span class="warning">Inject MacSploit (Auto)</span>
+            </h2>
+            <p><span class="warning">Warning: It is not recommended you turn this off as this can cause connection issues with Sight and MacSploit.</span> Automatically inject MacSploit when you start Roblox.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="injectMacSploit">
+            <label for="injectMacSploit"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">elderly</span>
+                Script Compatibility Mode
+            </h2>
+            <p>Attempts to make scripts compatible. (?)</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="scriptCompatibilityMode">
+            <label for="scriptCompatibilityMode"></label>
+        </div>
+    </div>
+</div>
+
+<div class="section-header">Miscellaneous Settings</div>
+<div class="card">
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">trending_up</span>
+                Norb UNC Improvements
+            </h2>
+            <p>Improvements to the UNC of MacSploit.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="norbUncImprovements">
+            <label for="norbUncImprovements"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">http</span>
+                HTTP Improvements
+            </h2>
+            <p>Improvements to requests using the HTTP protocol.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="httpImprovements">
+            <label for="httpImprovements"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">diamond</span>
+                MacSploit Presence
+            </h2>
+            <p>In-game MacSploit Presence.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="macSploitPresence">
+            <label for="macSploitPresence"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2>
+                <span class="material-icons-round">headset_mic</span>
+                Discord Presence
+            </h2>
+            <p>Note: Is only for paid MacSploit versions. Display a Discord presence that you have MacSploit enabled.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="discordPresence">
+            <label for="discordPresence"></label>
+        </div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <h2 class="warning">
+                <span class="material-icons-round">report</span>
+                Decreased Sandbox
+            </h2>
+            <p><span class="warning">Do not enable this if you do not know what you are doing. This can open you up to getting hacked via malicious scripts.</span> Decreases Sandbox protections.</p>
+        </div>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="decreasedSandbox">
+            <label for="decreasedSandbox"></label>
+        </div>
+    </div>
+</div>
+
+<p>Note: These settings change your settings for MacSploit. They will save and be available for use whenever you use MacSploit.</p>
+
+<br><br><br><br><br><br><br><br>
+
+<button class="execute">
+    <span class="material-icons-round">save</span>
+    <p>Save MacSploit Settings</p>
+</button>
+
+
+
+<script>
+    // Theme switching logic
+const themeDropdown = document.getElementById('theme-dropdown');
+const themePreview = document.getElementById('theme-preview');
+
+// Function to update theme preview
+function updateThemePreview(theme) {
+  // Apply theme to preview
+  themePreview.className = `theme-preview ${theme}-theme`;
+  
+  // Apply theme to document for preview
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+// Handle theme selection
+themeDropdown.addEventListener('change', () => {
+  const selectedTheme = themeDropdown.value;
+  updateThemePreview(selectedTheme);
+  
+  parent.writeMacsploitSetting('theme', selectedTheme);
+  
+  if (parent.themeManager && typeof parent.themeManager.change === 'function') {
+    parent.themeManager.change(selectedTheme);
+  } else {
+    localStorage.setItem('sight-theme', selectedTheme);
+  }
+});
+
+const savedThemeFromStorage = localStorage.getItem('sight-theme');
+
+if (savedThemeFromStorage) {
+  themeDropdown.value = savedThemeFromStorage;
+  updateThemePreview(savedThemeFromStorage);
+} else {
+  console.error("[Theme Selector] Could not find user-selected theme.");
+}
+
+document.querySelector('.execute').addEventListener('click', () => {
+        const settings = {
+            autoExecute: document.getElementById('autoExecute').checked,
+            logHttp: document.getElementById('injectMacSploit').checked,
+            compatibilityMode: document.getElementById('scriptCompatibilityMode').checked,
+            debugLibrary: document.getElementById('allowWebsocketLibrary').checked,
+            discordRpc: document.getElementById('discordPresence').checked,
+            dumpScripts: document.getElementById('dumpAllScriptsOnJoin').checked,
+            executeInstances: document.getElementById('hwidSpoofer').checked,
+            fileSystem: document.getElementById('allowFS').checked,
+            httpTraffic: document.getElementById('allowHttpTraffic').checked,
+            resumeHandle: document.getElementById('httpImprovements').checked,
+            autoInject: document.getElementById('uncapFPS').checked,
+            norbUnc: document.getElementById('norbUncImprovements').checked,
+            placeRestrictions: document.getElementById('bypassPlaceRestrictions').checked,
+            multiInstance: document.getElementById('protectErrors').checked,
+            robloxRpc: document.getElementById('macSploitPresence').checked,
+            sandbox: document.getElementById('decreasedSandbox').checked,
+            serverTeleports: document.getElementById('allowServerTeleports').checked,
+            settingsControl: document.getElementById('allowQueueOnTeleport').checked
+        };
+
+        Object.entries(settings).forEach(([key, value]) => {
+            console.log('[Settings] (SAVE IN PROGRESS) Saving setting:', key, value);
+            parent.writeMacsploitSetting(key, value);
+        });
+
+        parent.showNotification(
+            "Saved your Settings", 
+            "Sucessfully saved your settings.", 
+            );
+    });
+
+    // Add hover effect to cards
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mouseover', () => {
+            card.style.transform = 'translateY(-4px)';
+        });
+
+        card.addEventListener('mouseout', () => {
+            card.style.transform = 'translateY(0)';
+        });
+    });
+
+
+// actual code that makes settings work
+(async () => {
+    // Mapping between JSON keys and DOM element IDs
+    const keyToDomIdMap = {
+        autoExecute: "autoExecute",
+        logHttp: "injectMacSploit",
+        compatibilityMode: "scriptCompatibilityMode",
+        debugLibrary: "allowWebsocketLibrary",
+        discordRpc: "discordPresence",
+        dumpScripts: "dumpAllScriptsOnJoin",
+        executeInstances: "hwidSpoofer",
+        fileSystem: "allowFS",
+        httpTraffic: "allowHttpTraffic",
+        resumeHandle: "httpImprovements",
+        autoInject: "uncapFPS",
+        norbUnc: "norbUncImprovements",
+        placeRestrictions: "bypassPlaceRestrictions",
+        multiInstance: "protectErrors",
+        robloxRpc: "macSploitPresence",
+        sandbox: "decreasedSandbox",
+        serverTeleports: "allowServerTeleports",
+        settingsControl: "allowQueueOnTeleport"
+    };
+
+    const maxRetries = 20;
+    let attempts = 0;
+
+    while (attempts < maxRetries) {
+        try {
+            const settings = await parent.readMacsploitSettings();
+            console.log("[Settings] / [Debug] Raw settings:", settings);
+
+            if (settings) {
+                Object.entries(settings).forEach(([key, value]) => {
+                    const domId = keyToDomIdMap[key];
+                    if (domId) {
+                        const checkbox = document.getElementById(domId);
+                        if (checkbox) {
+                            checkbox.checked = !!value;
+                        } else {
+                            console.warn(`[Settings] Checkbox with mapped ID "${domId}" not found in the DOM`);
+                        }
+                    } else {
+                        console.warn(`[Settings] No mapping found for JSON key "${key}"`);
+                    }
+                });
+
+                console.log("[Settings] Settings applied successfully");
+                break; // Exit the loop if settings are applied successfully
+            } else {
+                console.warn("[Settings] No settings were returned from readMacsploitSettings");
+            }
+        } catch (error) {
+            console.error("[Settings] An error occurred while reading settings:", error);
+        }
+
+        attempts++;
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
+    }
+
+    if (attempts === maxRetries) {
+        console.error("Failed to read settings after maximum retries");
+    }
+})();
+
+document.getElementById('openMsws').addEventListener('click', () => {
+    parent.openMsFolder('msworkspace');
+});
+document.getElementById('openMsae').addEventListener('click', () => {
+    parent.openMsFolder('msautoexecution');
+});
+
+    
+</script>
+</body>
+</html>

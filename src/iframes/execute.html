@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="/scrollbar.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execute</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Rubik', sans-serif;
+            color: #fff;
+        }
+
+        .code-container {
+            background: #1e2028;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #666;
+        }
+
+        .status-dot.connected {
+            background: #00D4A8;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        code {
+            color: #e0e0e0;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1e2028;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(62, 62, 62, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            width: 800px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        input {
+            width: 100%;
+            height: 24px;
+            padding: 4px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        button {
+            padding: 10px;
+            background: #0086d4;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #00b392;
+        }
+
+        .scripts-container {
+            margin-top: 20px;
+        }
+
+        .script-item {
+            background: rgba(177, 177, 177, 0.2);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .ml-20 {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="loginSection">
+        <h2>Connect to Kyvorn Execute</h2>
+        <div>
+            <div class="form-group">
+                <label for="token">Executor Token</label>
+                <input type="text" id="token" placeholder="Enter your executor token">
+            </div>
+            <button onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <div id="executorSection" style="display: none;">
+        <div class="status-indicator">
+            <div id="statusDot" class="status-dot"></div>
+            <span id="statusText" class="status-text">Disconnected</span>
+            <button onclick="unlink()" class="ml-20">Unlink</button>
+        </div>
+
+        <div id="scriptsContainer" class="scripts-container"></div>
+    </div>
+
+    <script>
+        const API_SERVER_URL = "https://kyvornapi.peretas.live";
+        const DEFAULT_EXECUTOR_NAME = "Sight for MacSploit";
+        const SCRIPT_CHECK_WAIT_DURATION = 5000;
+        
+        let executorToken = localStorage.getItem('executorToken');
+        let executorName = DEFAULT_EXECUTOR_NAME;
+        let checkSessionInterval;
+
+        function log(message, type = '') {
+            if (type === 'error') {
+                console.error("[Kyvorn Execute] " + message)
+            } else if (type === 'warning') {
+                console.warn("[Kyvorn Execute] " + message)
+            } else {
+                console.log("[Kyvorn Execute] " + message)
+            }
+        }
+
+        log(`Ready`)
+
+        async function login() {
+            const token = document.getElementById('token').value;
+
+            if (!token) {
+                log("Executor token required", "error");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_SERVER_URL}/api/auth/executor/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, name: DEFAULT_EXECUTOR_NAME })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    executorToken = token;
+                    executorName = name;
+                    localStorage.setItem('executorToken', token);
+                    localStorage.setItem('executorName', name);
+                    showExecutorSection();
+                    log("Connected to Kyvorn Execute API");
+                    startSessionCheck();
+                } else {
+                    log(`Login failed: ${data.error || 'Unknown error'}`, "error");
+                }
+            } catch (error) {
+                log(`Failed to login: ${error.message}`, "error");
+            }
+        }
+
+        async function checkSession() {
+            if (!executorToken) return;
+
+            try {
+                const response = await fetch(`${API_SERVER_URL}/api/auth/executor/session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: executorToken })
+                });
+
+                const data = await response.json();
+                if (!data.paired) {
+                    log("User has unpaired executor, logging out...");
+                    logout();
+                    return;
+                }
+
+                document.getElementById('statusDot').classList.add('connected');
+                document.getElementById('statusText').textContent = 'Connected as ' + data.name;
+                log("Connected");
+                await checkPendingScripts();
+            } catch (error) {
+                log(`User session check failed: ${error}`, "error");
+            }
+        }
+
+        async function getScriptById(sid) {
+            try {
+                const response = await fetch(`${API_SERVER_URL}/api/posts/${sid}`);
+                const data = await response.json();
+                const scr = data.scriptContent;
+
+                execute(scr);
+                log(`Executed ${sid} from Kyvorn`);
+
+            } catch (error) {
+                log(`Failed to fetch script from Kyvorn: ${error}`, "error");
+            }
+        }
+
+        function execute(script) {
+            parent.execute(script);
+        }
+
+        async function checkPendingScripts() {
+            try {
+                const response = await fetch(`${API_SERVER_URL}/api/execute/receive/${executorToken}`);
+                const data = await response.json();
+
+                if (data.scripts && data.scripts.length > 0) {
+                    data.scripts.forEach(script => {
+                        if (script.type === "sid") {
+                            getScriptById(script.scriptId);
+                        } else if (script.type === "editor") {
+                            execute(script.scriptId);
+                        }
+                    });
+                }
+            } catch (error) {
+                log(`Failed checking pending scripts: ${error}`, "error");
+            }
+        }
+
+        function startSessionCheck() {
+            checkSession();
+            checkSessionInterval = setInterval(checkSession, SCRIPT_CHECK_WAIT_DURATION);
+        }
+
+        function logout() {
+            log(`Removing items, user has unpaired this executor ${localStorage.getItem('executorToken')}`);
+            localStorage.removeItem('executorToken');
+            localStorage.removeItem('executorName');
+            executorToken = null;
+            executorName = null;
+            clearInterval(checkSessionInterval);
+            document.getElementById('statusDot').classList.remove('connected');
+            document.getElementById('statusText').textContent = 'Disconnected';
+            document.getElementById('scriptsContainer').innerHTML = '';
+            showLoginSection();
+            log(`Logged out of Kyvorn Execute`);
+        }
+
+        function showLoginSection() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('executorSection').style.display = 'none';
+        }
+
+        function showExecutorSection() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('executorSection').style.display = 'block';
+        }
+
+        if (executorToken && executorName) {
+            showExecutorSection();
+            startSessionCheck();
+        }
+
+        function unlink() {
+            log(`Unlinking executor ${localStorage.getItem('executorToken')}`);
+            localStorage.removeItem('executorToken');
+            localStorage.removeItem('executorName');
+            executorToken = null;
+            executorName = null;
+            clearInterval(checkSessionInterval);
+            document.getElementById('statusDot').classList.remove('connected');
+            document.getElementById('statusText').textContent = 'Disconnected';
+            document.getElementById('scriptsContainer').innerHTML = '';
+            showLoginSection();
+            log(`Unlinked from Kyvorn Execute`);
+        }
+    </script>
+</body>
+</html>

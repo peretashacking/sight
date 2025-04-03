@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Script Hub Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0078D4;
+            --primary-dark: #005fb8;
+            --accent: #00D4A8;
+            --background: #13151a00;
+            --surface: #1e2028;
+            --titlebar: #2a2d30;
+            --kyvorn-primary: #6366f1;
+            --kyvorn-accent: #a855f7;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: radial-gradient(circle at top right, var(--surface), var(--background));
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background: rgba(28, 43, 44, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo.kyvorn {
+            background: linear-gradient(135deg, var(--kyvorn-primary), var(--kyvorn-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .search-container {
+            position: relative;
+            width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Rubik', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 212, 168, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 40px;
+        }
+
+        .script-card {
+            background: rgba(30, 32, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .script-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .script-content {
+            padding: 20px;
+        }
+
+        .script-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .game-name {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .script-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 63px;
+        }
+
+        .script-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: auto;
+        }
+
+        .script-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .execute-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .execute-btn.kyvorn {
+            background: linear-gradient(135deg, var(--kyvorn-primary), var(--kyvorn-accent));
+        }
+
+        .execute-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 120, 212, 0.3);
+        }
+
+        .execute-btn:active {
+            transform: translateY(0);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            text-align: center;
+            color: #ff5f57;
+            padding: 20px;
+            display: none;
+        }
+
+        .verification-badge {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+        }
+
+        .verification-badge.kyvorn {
+            background: linear-gradient(135deg, var(--kyvorn-primary), var(--kyvorn-accent));
+        }
+
+        .copy-btn {
+            background: var(--surface);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+        }
+
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+
+        .selection-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .selection-heading {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #0078D4, #00D4A8, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .selection-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+        }
+
+        .service-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .service-card {
+            background: rgba(30, 32, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .scriptblox-icon {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .kyvorn-icon {
+            background: linear-gradient(135deg, var(--kyvorn-primary), var(--kyvorn-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .service-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .service-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .api-select-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .api-select-btn.scriptblox:hover {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: transparent;
+        }
+
+        .api-select-btn.kyvorn:hover {
+            background: linear-gradient(135deg, var(--kyvorn-primary), var(--kyvorn-accent));
+            border-color: transparent;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: rgba(255, 255, 255, 0.5);
+            background: none;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .back-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-options {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-overlay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #fff;
+        }
+
+        .script-textarea {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 15px;
+            margin-bottom: 15px;
+            resize: none;
+        }
+
+        .script-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0, 212, 168, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-modal-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copy-modal-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--accent);
+        }
+
+        .execute-modal-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+        }
+
+        .execute-modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 120, 212, 0.3);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .search-container {
+                width: 100%;
+            }
+            
+            .scripts-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .service-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .service-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="selection-container" id="api-selection">
+        <h1 class="selection-heading">Choose Your Script Provider</h1>
+        <p class="selection-description">Select the script provider you want to use to find and execute scripts.</p>
+        <div class="service-options">
+            <div class="service-card" onclick="selectAPI('scriptblox')">
+                <div class="service-icon scriptblox-icon">
+                    <span class="material-icons-round">code</span>
+                </div>
+                <h2 class="service-title">ScriptBlox</h2>
+                <p class="service-description">Access and execute scripts from the ScriptBlox library.</p>
+                <button class="api-select-btn scriptblox">Select ScriptBlox</button>
+            </div>
+            <div class="service-card" onclick="selectAPI('kyvorn')">
+                <div class="service-icon kyvorn-icon">
+                    <span class="material-icons-round">code</span>
+                </div>
+                <h2 class="service-title">Kyvorn</h2>
+                <p class="service-description">Access and execute scripts from the Kyvorn library.</p>
+                <button class="api-select-btn kyvorn">Select Kyvorn</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-interface" style="display: none;">
+        <div class="header">
+            <div class="tab-options">
+                <button class="back-btn" onclick="showAPISelection()">
+                    <span class="material-icons-round">arrow_back</span>
+                    Back
+                </button>
+                <div id="app-logo" class="logo">
+                    <span class="material-icons-round">code</span>
+                    <span id="logo-text">ScriptBlox</span>
+                </div>
+            </div>
+            <div class="search-container">
+                <span class="material-icons-round search-icon">search</span>
+                <input type="text" class="search-input" placeholder="Search scripts...">
+            </div>
+        </div>
+
+        <div class="loading-spinner"></div>
+        <div class="error-message"></div>
+        <div class="scripts-grid"></div>
+    </div>
+
+    <div class="status-overlay" id="status-message"></div>
+
+    <div class="modal-overlay" id="script-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Script Content</h3>
+                <button class="close-modal" onclick="closeModal()">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+            <textarea class="script-textarea" id="script-content" readonly></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn copy-modal-btn" onclick="copyScriptContent()">
+                    <span class="material-icons-round">content_copy</span>
+                    Copy Script
+                </button>
+                <button class="modal-btn execute-modal-btn" onclick="executeModalScript()">
+                    <span class="material-icons-round">play_arrow</span>
+                    Execute Script
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentAPI = '';
+        const searchInput = document.querySelector('.search-input');
+        const scriptsGrid = document.querySelector('.scripts-grid');
+        const loadingSpinner = document.querySelector('.loading-spinner');
+        const errorMessage = document.querySelector('.error-message');
+        const appLogo = document.getElementById('app-logo');
+        const logoText = document.getElementById('logo-text');
+        const apiSelection = document.getElementById('api-selection');
+        const appInterface = document.getElementById('app-interface');
+        const statusMessage = document.getElementById('status-message');
+
+        // Utility functions
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const scriptModal = document.getElementById('script-modal');
+        const scriptContent = document.getElementById('script-content');
+        let currentScript = '';
+
+        function showModal(script) {
+            currentScript = script;
+            scriptContent.value = script;
+            scriptModal.style.display = 'flex';
+            updateModalStyling();
+        }
+
+        function closeModal() {
+            scriptModal.style.display = 'none';
+            currentScript = '';
+            scriptContent.value = '';
+        }
+
+        function copyScriptContent() {
+            scriptContent.select();
+            document.execCommand('copy');
+            showStatus('Script copied to clipboard!');
+        }
+
+        function executeModalScript() {
+            if (currentScript) {
+                parent.execute(currentScript);
+                showStatus('Script executed successfully!');
+                closeModal();
+            }
+        }
+        
+        // Update modal styling based on current API
+        function updateModalStyling() {
+            const executeModalBtn = document.querySelector('.execute-modal-btn');
+            if (currentAPI === 'kyvorn') {
+                executeModalBtn.style.background = 'linear-gradient(135deg, var(--kyvorn-primary), var(--kyvorn-accent))';
+            } else {
+                executeModalBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--accent))';
+            }
+        }
+
+        function executeScript(script) {
+            showModal(script);
+        }
+
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.style.backgroundColor = isError ? 'rgba(255, 87, 87, 0.9)' : 'rgba(0, 0, 0, 0.7)';
+            statusMessage.style.display = 'block';
+            
+            // Hide the status message after 3 seconds
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // API Selection function
+        function selectAPI(api) {
+            currentAPI = api;
+            
+            apiSelection.style.display = 'none';
+            appInterface.style.display = 'block';
+            
+            if (api === 'kyvorn') {
+                logoText.textContent = 'Kyvorn';
+                appLogo.classList.add('kyvorn');
+                searchInput.placeholder = 'Search Kyvorn scripts...';
+            } else {
+                logoText.textContent = 'ScriptBlox';
+                appLogo.classList.remove('kyvorn');
+                searchInput.placeholder = 'Search ScriptBlox scripts...';
+            }
+            
+            fetchScripts();
+        }
+
+        function showAPISelection() {
+            appInterface.style.display = 'none';
+            apiSelection.style.display = 'block';
+        }
+
+        // ScriptBlox API functions
+        async function fetchScriptBloxScripts(query = '') {
+            try {
+                loadingSpinner.style.display = 'block';
+                scriptsGrid.style.display = 'none';
+                errorMessage.style.display = 'none';
+
+                const baseUrl = 'https://scriptblox-api-proxy.vercel.app/api/search';
+                const params = new URLSearchParams({
+                    q: query,
+                });
+
+                const response = await fetch(`${baseUrl}?${params}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    errorMessage.textContent = 'Failed, or you haven\'t searched for anything. Try searching for something. Error: ' + data.error;
+                    errorMessage.style.display = 'block';
+                } else {
+                    displayScriptBloxScripts(data.result?.scripts || []);
+                }
+            } catch (error) {
+                console.error('Error fetching ScriptBlox scripts:', error);
+                errorMessage.textContent = 'Error loading scripts. Please try again later.';
+                errorMessage.style.display = 'block';
+            } finally {
+                loadingSpinner.style.display = 'none';
+                scriptsGrid.style.display = 'grid';
+            }
+        }
+
+        function displayScriptBloxScripts(scripts) {
+            scriptsGrid.innerHTML = scripts.map(script => `
+            <div class="script-card">
+                <img class="game-image" src="${script.game.imageUrl}" alt="${script.game.name}" onerror="this.src='https://tr.rbxcdn.com/placeholder/150/150/Image/Png'">
+                <div class="script-content">
+                    <div class="script-title">
+                        ${script.title}
+                        ${script.verified ? `<span class="verification-badge">
+                            <span class="material-icons-round" style="font-size: 14px;">verified</span>
+                            Verified
+                        </span>` : ''}
+                    </div>
+                    <div class="game-name">${script.game.name}</div>
+                    <div class="script-meta">
+                        <div class="script-stats">
+                            <div class="stat">
+                                <span class="material-icons-round">thumb_up</span>
+                                ${script.views || 0}
+                            </div>
+                            <div class="stat">
+                                <span class="material-icons-round">payments</span>
+                                ${script.scriptType}
+                            </div>
+                        </div>
+                        <div class="script-date">
+                            ${new Date(script.createdAt).toLocaleDateString()}
+                        </div>
+                    </div>
+                    <button class="execute-btn" onclick="showModal('${script.script.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        <span class="material-icons-round">code</span>
+                        View Script
+                    </button>
+                </div>
+            </div>
+            `).join('');
+        }
+
+        // Kyvorn API functions
+        async function fetchKyvornScripts(query = '') {
+            try {
+                loadingSpinner.style.display = 'block';
+                scriptsGrid.style.display = 'none';
+                errorMessage.style.display = 'none';
+
+                const baseUrl = 'https://kyvornapi.peretas.live/api/posts';
+                const params = new URLSearchParams();
+                
+                if (query) {
+                    params.append('search', query);
+                }
+                
+                params.append('limit', '30'); // Limit results to 30 items
+
+                const response = await fetch(`${baseUrl}?${params}`);
+                
+                if (!response.ok) {
+                    throw new Error(`API responded with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                displayKyvornScripts(data);
+            } catch (error) {
+                console.error('Error fetching Kyvorn scripts:', error);
+                errorMessage.textContent = 'Error loading scripts from Kyvorn API. Please try again later.';
+                errorMessage.style.display = 'block';
+            } finally {
+                loadingSpinner.style.display = 'none';
+                scriptsGrid.style.display = 'grid';
+            }
+        }
+
+        async function getKyvornScriptContent(postId) {
+            try {
+                const response = await fetch(`https://kyvornapi.peretas.live/api/posts/${postId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch script content, status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Return the scriptContent property directly from the response
+                // This is the key improvement - using the proper endpoint and property
+                return data.scriptContent;
+            } catch (error) {
+                console.error('Error fetching script content:', error);
+                showStatus('Failed to fetch script content', true);
+                return null;
+            }
+        }
+
+        function displayKyvornScripts(scripts) {
+            if (!Array.isArray(scripts) || scripts.length === 0) {
+                errorMessage.textContent = 'No scripts found. Try a different search term.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            scriptsGrid.innerHTML = scripts.map(script => `
+            <div class="script-card">
+                <img class="game-image" src="${script.scriptInfo?.bannerUrl || 'https://tr.rbxcdn.com/placeholder/150/150/Image/Png'}" 
+                     alt="${script.title}" onerror="this.src='https://tr.rbxcdn.com/placeholder/150/150/Image/Png'">
+                <div class="script-content">
+                    <div class="script-title">
+                        ${script.title}
+                        ${script.author?.verified ? `<span class="verification-badge kyvorn">
+                            <span class="material-icons-round" style="font-size: 14px;">verified</span>
+                            Verified
+                        </span>` : ''}
+                    </div>
+                    <div class="game-name">${script.scriptInfo?.game || 'Universal'}</div>
+                    <div class="script-description">${script.content || 'No description provided'}</div>
+                    <div class="script-meta">
+                        <div class="script-stats">
+                            <div class="stat">
+                                <span class="material-icons-round">thumb_up</span>
+                                ${script.stats?.likes || 0}
+                            </div>
+                            <div class="stat">
+                                <span class="material-icons-round">payments</span>
+                                ${script.scriptInfo?.pricing || 'Free'}
+                            </div>
+                        </div>
+                        <div class="script-date">
+                            ${new Date(script.timestamp).toLocaleDateString()}
+                        </div>
+                    </div>
+                    <button class="execute-btn kyvorn" onclick="viewKyvornScript('${script.id}')">
+                        <span class="material-icons-round">code</span>
+                        View Script
+                    </button>
+                </div>
+            </div>
+            `).join('');
+        }
+
+        async function copyKyvornScript(postId) {
+            const btn = event.target.closest('.copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-icons-round">hourglass_top</span>Loading...';
+            
+            try {
+                const scriptContent = await getKyvornScriptContent(postId);
+                
+                if (scriptContent) {
+                    navigator.clipboard.writeText(scriptContent)
+                    .then(() => {
+                        btn.innerHTML = '<span class="material-icons-round">check</span>Copied!';
+                        showStatus('Script copied to clipboard!');
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Could not copy text: ', err);
+                        btn.innerHTML = '<span class="material-icons-round">error</span>Failed';
+                        showStatus('Failed to copy script', true);
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                        }, 2000);
+                    });
+                    showStatus('Script copied to clipboard!');
+                } else {
+                    throw new Error('No script content received');
+                }
+            } catch (err) {
+                console.error('Could not copy text:', err);
+                btn.innerHTML = '<span class="material-icons-round">error</span>Failed';
+                showStatus('Failed to copy script', true);
+            } finally {
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }
+        }
+
+        async function viewKyvornScript(postId) {
+            const btn = event.target.closest('.execute-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-icons-round">hourglass_top</span>Loading...';
+            
+            try {
+                const scriptContent = await getKyvornScriptContent(postId);
+                
+                if (scriptContent) {
+                    // Show the script in the modal
+                    showModal(scriptContent);
+                    showStatus('Script loaded successfully!');
+                } else {
+                    throw new Error('No script content received');
+                }
+            } catch (err) {
+                console.error('Could not load script:', err);
+                showStatus('Failed to load script', true);
+            } finally {
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 1000);
+            }
+        }
+
+        async function executeKyvornScript(postId) {
+            const btn = event.target.closest('.execute-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-icons-round">hourglass_top</span>Loading...';
+            
+            try {
+                const scriptContent = await getKyvornScriptContent(postId);
+                
+                if (scriptContent) {
+                    executeScript(scriptContent);
+                    btn.innerHTML = '<span class="material-icons-round">check</span>Executed';
+                    showStatus('Script executed successfully!');
+                } else {
+                    throw new Error('No script content received');
+                }
+            } catch (err) {
+                console.error('Could not execute script:', err);
+                btn.innerHTML = '<span class="material-icons-round">error</span>Failed';
+                showStatus('Failed to execute script', true);
+            } finally {
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }
+        }
+
+        async function copyScript(scriptContent) {
+            const btn = event.target.closest('.copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-icons-round">hourglass_top</span>Opening...';
+            
+            try {
+                parent.openEditor(scriptContent);
+                btn.innerHTML = '<span class="material-icons-round">check</span>Opened';
+                showStatus('Script opened in editor');
+            } catch (error) {
+                console.error('Failed to open script:', error);
+                btn.innerHTML = '<span class="material-icons-round">error</span>Failed';
+                showStatus('Failed to open script in editor', true);
+            } finally {
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }
+        }
+
+        // Unified fetch function that routes to the appropriate API
+        function fetchScripts(query = '') {
+            if (currentAPI === 'kyvorn') {
+                fetchKyvornScripts(query);
+            } else {
+                fetchScriptBloxScripts(query);
+            }
+        }
+
+        // Event Listeners
+        const handleSearch = debounce((event) => {
+            fetchScripts(event.target.value);
+        }, 500);
+
+        searchInput.addEventListener('input', handleSearch);
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+  <link href="/scrollbar.css" rel="stylesheet">
+  <link href="alert/alert.css" rel="stylesheet">
+</head>
+<body>
+<div class="grid"></div>
+<div class="decoration decoration-1"></div>
+<div class="decoration decoration-2"></div>
+
+<div data-tauri-drag-region class="titlebar">
+  <div class="traffic-lights" data-tauri-drag-region>
+    <div class="light red" id="titlebar-close" data-symbol="X"></div>
+    <div class="light yellow" id="titlebar-minimize" data-symbol="-"></div>
+    <div class="light green" id="titlebar-maximize" data-symbol="+"></div>
+  </div>
+  <div class="sightText" data-tauri-drag-region>
+    <p>Sight for MacSploit</p>
+  </div>
+  <div class="injectStatus">
+    <p id="statusText">Waiting for AutoInject...</p>
+  </div>
+</div>
+
+<button class="nav-button" id="sidebarToggle">
+  <span class="material-icons-round">grid_view</span>
+</button>
+
+<div class="blur"></div>
+
+<div class="sidebar">
+  <div class="menu-items">
+    <div class="menu-item editor" id="editorButton">
+      <span class="material-icons-round">code</span>
+      <span>Script Editor</span>
+    </div>
+    <!--<div class="menu-item editor" id="consoleButton">
+      <span class="material-icons-round">terminal</span>
+      <span>Console</span>
+    </div>-->
+    
+    <div class="menu-item editor" id="bypassButton">
+      <span class="material-icons-round">share</span>
+      <span>Bypass Hub</span>
+    </div>
+    <div class="menu-item editor" id="scriptbloxButton">
+      <span class="material-icons-round">book</span>
+      <span>Script Library</span>
+    </div>
+    <div class="menu-item editor" id="kyexButton">
+      <span class="material-icons-round">play_circle</span>
+      <span>Kyvorn Execute</span>
+    </div>
+    <div class="menu-item editor" id="infoButton">
+      <span class="material-icons-round">info</span>
+      <span>About Sight</span>
+    </div>
+    <div class="menu-item editor" id="settingsButton">
+      <span class="material-icons-round">settings</span>
+      <span>Settings</span>
+    </div>
+    <div class="menu-item editor" id="injectButton">
+      <span class="material-icons-round">link</span>
+      <span>Inject</span>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <!-- Preload all iframes -->
+  <iframe id="editorIframe" src="iframes/editor.html" class="iframe"></iframe>
+  <iframe id="settingsIframe" src="iframes/settings.html" class="iframe hidden"></iframe>
+  <iframe id="infoIframe" src="iframes/about.html" class="iframe hidden"></iframe>
+  <iframe id="scriptbloxIframe" src="iframes/scriptblox.html" class="iframe hidden"></iframe>
+  <iframe id="bypassIframe" src="iframes/bypass.html" class="iframe hidden"></iframe>
+  <iframe id="kyexIframe" src="iframes/execute.html" class="iframe hidden"></iframe>
+  <!--<iframe id="consoleIframe" src="iframes/console.html" class="iframe hidden"></iframe>-->
+</div>
+
+<script>
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const blur = document.querySelector('.blur')
+  let sidebarOpen = false;
+
+  function toggleSidebar() {
+    sidebarOpen = !sidebarOpen;
+    sidebar.classList.toggle('open');
+    blur.classList.toggle('active');
+  }
+
+  document.querySelector('.blur').addEventListener('click', toggleSidebar);
+
+  function setActiveMenuItem(id) {
+    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function toggleIframe(activeIframeId) {
+    document.querySelectorAll('.iframe').forEach(iframe => iframe.classList.add('hidden'));
+    document.getElementById(activeIframeId).classList.remove('hidden');
+  }
+
+
+
+  function loadEditorPage() {
+    setActiveMenuItem('editorButton');
+    toggleIframe('editorIframe');
+  }
+
+  function loadSettingsPage() {
+    setActiveMenuItem('settingsButton');
+    toggleIframe('settingsIframe');
+  }
+
+  function loadInfoPage() {
+    setActiveMenuItem('infoButton');
+    toggleIframe('infoIframe');
+  }
+
+  function loadExecPage() {
+    setActiveMenuItem('kyexButton');
+    toggleIframe('kyexIframe');
+  }
+
+  function loadScriptBloxPage() {
+    setActiveMenuItem('scriptbloxButton');
+    toggleIframe('scriptbloxIframe');
+  }
+  function loadBypassPage() {
+    setActiveMenuItem('bypassButton');
+    toggleIframe('bypassIframe');
+  }
+  //function loadConsolePage() { setActiveMenuItem('consoleButton'); toggleIframe('consoleIframe'); }
+
+  // Add event listeners for the sidebar toggle and menu items
+  sidebarToggle.addEventListener('click', toggleSidebar);
+  document.getElementById('editorButton').addEventListener('click', loadEditorPage);
+  document.getElementById('settingsButton').addEventListener('click', loadSettingsPage);
+  document.getElementById('infoButton').addEventListener('click', loadInfoPage);
+  document.getElementById('kyexButton').addEventListener('click', loadExecPage);
+  document.getElementById('scriptbloxButton').addEventListener('click', loadScriptBloxPage);
+  document.getElementById('injectButton').addEventListener('click', function() {
+    attach();
+  });
+  document.getElementById('bypassButton').addEventListener('click', loadBypassPage);
+  // document.getElementById('consoleButton').addEventListener('click', loadConsolePage);
+
+  // Load the code editor page by default
+  //loadSettingsPage();
+  loadEditorPage();
+
+
+  function setStatus(color) {
+    const statusText = document.querySelector(".injectStatus");
+    if (color === "orange") {
+      statusText.style.backgroundColor = "#c88a2b";
+    } else if (statusText) {
+      statusText.style.backgroundColor = color;
+    }
+  }
+  
+  // Add click event to the status indicator for direct injection
+  document.querySelector(".injectStatus").addEventListener('click', function() {
+    attach();
+  });
+
+
+</script>
+
+<script src="theme.js"></script>
+<script src="main.js"></script>
+<script src="alert/alert.js"></script>
+</body>
+</html>

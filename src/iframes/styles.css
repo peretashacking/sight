@@ -1,0 +1,362 @@
+:root {
+    --primary: #0078D4;
+    --accent: #00D4A8;
+    --background: #13151a;
+    --surface: #1e2028;
+    --text: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] {
+    --primary: #0078D4;
+    --accent: #00D4A8;
+    --background: #13151a;
+    --surface: #1e2028;
+    --text: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="blue"] {
+    --primary: #3b82f6;
+    --accent: #60a5fa;
+    --background: #0f172a;
+    --surface: #1e293b;
+    --text: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="purple"] {
+    --primary: #8b5cf6;
+    --accent: #a78bfa;
+    --background: #1e1b4b;
+    --surface: #312e81;
+    --text: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="green"] {
+    --primary: #10b981;
+    --accent: #34d399;
+    --background: #064e3b;
+    --surface: #065f46;
+    --text: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="amber"] {
+    --primary: #f59e0b;
+    --accent: #fbbf24;
+    --background: #78350f;
+    --surface: #92400e;
+    --text: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="light"] {
+    --primary: #0078D4;
+    --accent: #00D4A8;
+    --background: #2f00ff;
+    --surface: #848484;
+    --text: #000000;
+    --text-secondary: rgba(0, 0, 0, 0.8);
+}
+
+body {
+    margin: 0;
+    padding-left: 40px;
+    padding-right: 40px;
+    font-family: 'Rubik', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    user-select: none;
+    -webkit-user-select: none; /* For Safari */
+    -moz-user-select: none; /* For Firefox */
+    -ms-user-select: none; /* For Internet Explorer/Edge */
+}
+
+h1 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 40px;
+    font-size: 3em;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 2px;
+}
+
+.card {
+    background: rgba(30, 32, 40, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 24px;
+    margin-bottom: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+    );
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+h2 {
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.7;
+    margin: 0;
+    font-size: 15px;
+}
+
+
+
+
+.execute,
+.clear,
+.iy,
+.roblox,
+.save,
+.open {
+    position: fixed;
+    bottom: 30px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Update specific positioning */
+.execute { right: 30px; width: 115px; }
+.clear { right: 155px; }
+.save { right: 215px; }
+.open { right: 275px; }
+.iy { right: 335px; }
+.roblox { right: 395px; }
+
+/* Hover styles for buttons */
+.execute:hover,
+.clear:hover,
+.save:hover,
+.open:hover,
+.iy:hover,
+.roblox:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Icon styles */
+.material-icons-round {
+    font-size: 24px;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+/* Hover effects for icons */
+.execute:hover .material-icons-round,
+.clear:hover .material-icons-round,
+.iy:hover .material-icons-round,
+.roblox:hover .material-icons-round {
+    transform: scale(1.1);
+}
+
+/* Tooltip styles */
+button[title] {
+    position: fixed;
+}
+
+button[title]::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    margin-bottom: 5px;
+}
+
+button[title]:hover::before {
+    opacity: 1;
+}
+
+.roblox img {
+    width: 24px;
+    height: 24px;
+}
+/* Add these styles to your existing CSS file */
+
+.tab-container {
+    display: flex;
+    align-items: center;
+    background: rgba(30, 32, 40, 0.2);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px;
+    height: 40px;
+    box-sizing: border-box;
+    width: calc(100% + 80px); /* Adjust width to stretch across the entire top */
+    margin-left: -40px; /* Adjust margin to align with the body padding */
+}
+
+.tabs {
+    display: flex;
+    flex: 1;
+    overflow-x: auto;
+    gap: 4px;
+    padding-right: 4px;
+}
+
+.tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    min-width: 120px;
+    max-width: 200px;
+    height: 32px;
+    padding: 0 12px;
+    background: transparent;
+    border-radius: 8px;
+    cursor: default;
+    user-select: none;
+    transition: all 0.2s ease;
+    position: relative;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.tab-title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.tab-title.editing {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 100%;
+    font-family: 'Rubik', sans-serif;
+    font-size: 14px;
+}
+
+.tab-close {
+    opacity: 0;
+    margin-left: 8px;
+    font-size: 18px !important;
+    padding: 2px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.tab:hover .tab-close {
+    opacity: 1;
+}
+
+.tab-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.new-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.new-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.new-tab .material-icons-round {
+    font-size: 20px;
+}
+
+.lualogo {
+    height: 18px;
+    margin-right: 6px;
+    filter: invert(1);
+    display: block;
+    margin-left: auto;
+}

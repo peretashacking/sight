@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0078D4;
+      --primary-dark: #005fb8;
+      --accent: #00D4A8;
+      --background: #13151a;
+      --surface: #1e2028;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background: radial-gradient(circle at top right, var(--surface), var(--background));
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(30, 32, 40, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 700px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .icon {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .material-icons-round {
+      font-size: 40px;
+      color: white;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff, #a0a0a0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .version {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 24px;
+    }
+
+    .message {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 32px;
+    }
+
+    .button {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .decoration {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      opacity: 0.3;
+      mix-blend-mode: screen;
+    }
+
+    .decoration-1 {
+      width: 600px;
+      height: 600px;
+      top: -300px;
+      right: -200px;
+      background: radial-gradient(circle at center, var(--primary), transparent 70%);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .decoration-2 {
+      width: 400px;
+      height: 400px;
+      bottom: -200px;
+      left: -200px;
+      background: radial-gradient(circle at center, var(--accent), transparent 70%);
+      animation: float 15s ease-in-out infinite reverse;
+    }
+
+    .grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 0;
+      opacity: 0.3;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(50px, -50px); }
+      50% { transform: translate(0, -100px); }
+      75% { transform: translate(-50px, -50px); }
+    }
+
+    @keyframes gridMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(50px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="decoration decoration-1"></div>
+  <div class="decoration decoration-2"></div>
+  
+  <div class="container">
+    <div class="icon">
+      <span class="material-icons-round">system_update</span>
+    </div>
+    <h1>Sight is open source</h1>
+    <div class="version">Current Version: v<span id="currentVersion">0.4.0</span></div>
+    <div class="message">
+     You are no longer required to download new versions of Sight after this version. Killswitch will stay in previous versions but not in this one.
+    </div>
+    <a href="index.html" target="_blank"><button class="button">Go back to Script Editor</button></a>
+  </div>
+
+  <script>
+    // Add button click animation
+    document.querySelector('.button').addEventListener('click', function() {
+      this.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        this.style.transform = '';
+      }, 100);
+    });
+  </script>
+</body>
+</html>

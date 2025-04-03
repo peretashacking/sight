@@ -1,4 +1,4 @@
-# Sight v0.4.0
+# Sight v0.5.0
 
 ### Setup
 1. Download the [Ace build 1.5.3](https://github.com/peretashacking/sight/releases/download/0.4.0/ace.zip) from the releases
